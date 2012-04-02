@@ -32,7 +32,7 @@ public class mcBasicSpawn {
 		}else Messages.restricted(player);
 		
 	}
-	
+	// .
 	public static void setspawn(Player player)
 	{
 		if(mcBasic.permission().has(player, "mcBasic.spawn.setspawn"))
