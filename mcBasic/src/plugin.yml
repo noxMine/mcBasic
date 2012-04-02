@@ -1,0 +1,117 @@
+name:  mcBasic
+version:  0.95
+database: true
+description:  Basic Command Plugin
+author:  noxMine
+website:  http://www.mc-craft.eu
+main:  me.noxMine.mcBasic.mcBasic
+commands:
+  spawn:
+    description: Teleport to Spawn Location
+    usage: /<command>
+  setspawn:
+    description: Set Spawn Location
+    usage: /<command>
+  time:
+    description: Set Time
+    usage: /<command> <time>
+  hilfe:
+    description: Shows Commandlist
+    usage: /<command> <page>
+  weather:
+    description: Set Weather sunny or stormy
+    usage: /<command> <weather>
+  broadcast:
+    description: Create Broadcast
+    aliases: bc
+    usage: /<command> <broadcast>
+  firstspawn:
+    description: Teleport to FirstSpawn
+    usage: /<command>
+  setfirstspawn:
+    description: Set the FirstSpawn Location
+    usage: /<command>
+  teleport:
+    description: Teleport Players
+    aliases: tp
+    usage: /<command> <player>
+  tell:
+    description: Talk private with other players
+    aliases: msg
+    usage: /<command> <player> <message>
+  reply:
+    description: reply private to other player
+    aliases: r
+    usage: /<command> <message>
+  mute:
+    description: Mute players
+    usage: /<command> <player>
+  unmute:
+    description: Unmute players
+    usage: /<command> <player>
+  k:
+    description: Kick Player
+    usage: /<command> <player>
+  item:
+    description: Give an Item to player
+    aliases: i
+    usage: /<command> <itemid> <amount>
+  clear:
+    description: Clear Inventory
+    usage: /<command>
+  jail:
+    description: Jail Players
+    usage: /<command> <player>
+  unjail:
+    description: Unjail jailed Players
+    usage: /<command> <player>
+  setjail:
+    description: Set Jail Location
+    usage: /<command>
+  setunjail:
+    description: Set Unjail Location
+    usage: /<command>
+  cart:
+    description: Get a Minecart
+    usage: /<command>
+  pw:
+    description: command promote by player
+    usage: /<command> <password>
+  spawnmob:
+    description: Spawns mob at player location
+    usage: /<command> <mobtype>
+  me:
+    description: broadcast what player is doing
+    usage: /<command> <message>
+  who:
+    description: Shows list of online players
+    aliases: list
+    usage: /<command>
+  gm:
+    description: Change gamemode
+    usage: /<command> <gamemode>
+  setwarp:
+    description: Set warp location
+    usage: /<command> <name>
+  delwarp:
+    description: Delete warps
+    usage: /<command> <name>
+  warp:
+    description: Warp to warp location
+    usage: /<command> <name>
+  warn:
+    description: Use to warn a player
+    usage: /<command> <user> <reason>
+  warns:
+    description: Use to see own warns or warns of another player
+    usage: /<command> <user>
+  delwarn:
+    description: Use to delete specified warns of players
+    usage: /<command> <user> <id>
+  accept:
+    description: Use to accept the warn
+    usage: /<command>
+  channel:
+    description: Change channel
+    aliases: ch
+    usage: /<command> <channel>
