@@ -97,15 +97,36 @@ public class mcBasicMessaging {
 
 	public static void channel(Player player, String[] args) 
 	{
-		if(args.length==1)
+		if(args.length==0)
 		{
-			if(mcBasic.permission().has(player, "mcBasic.messaging.channel.change")) changechannel(player,args);
-			else Messages.restricted(player);
+			if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findRowCount()==1)
+			{
+				mB_channelplayers chplayer = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findUnique();
+				String ch = chplayer.getChannel();
+				if(!ch.equals("0"))
+				{
+				player.sendMessage(ChatColor.DARK_AQUA + "Du befindest dich im Channel"+ChatColor.DARK_PURPLE+ " ["+ch+"]");
+				}
+				else player.sendMessage(ChatColor.DARK_AQUA + "Du befindest dich in keinem Channel!");
+			}
+			else player.sendMessage(ChatColor.DARK_AQUA + "Du befindest dich in keinem Channel!");
+		
+		}
+		
+		
+		else if(args.length==1)
+		{
+			changechannel(player,args);
+			
 		}
 		else if(args.length==2)
 		{
+			if(args[0].equalsIgnoreCase("create")||args[0].equalsIgnoreCase("new"))
+			{
 			if(mcBasic.permission().has(player, "mcBasic.messaging.channel.create")) createchannel(player,args);
 			else Messages.restricted(player);
+			}
+			else Messages.wronguse(player);
 		}
 		else Messages.wronguse(player);
 		
@@ -155,9 +176,16 @@ public class mcBasicMessaging {
 		if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findRowCount()==1)
 		{
 			mB_channelplayers chplayer = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findUnique();
+			String oldch = chplayer.getChannel();
+			if(!oldch.equalsIgnoreCase(ch))
+			{
 			chplayer.setChannel(ch);
 			mcBasic.getInstance().getDatabase().save(chplayer);
 			Messages.changechannelmsg(player,ch);
+			joinchannel(player, ch);
+			leavechannel(player, oldch);
+			}
+			else player.sendMessage(ChatColor.RED + "Du befindest dich bereits in diesem Channel!");
 		}
 		else
 		{
@@ -170,35 +198,138 @@ public class mcBasicMessaging {
 		
 	}
 
+	private static void leavechannel(Player player, String oldch) 
+	{
+		if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", oldch).findRowCount()>0)
+		{
+		List<mB_channelplayers> players = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", oldch).findList();
+		int i =0;
+		int size = players.size();
+		Player sendplayer;
+		String senduser=player.getName();
+		while(i < size)
+		{
+			sendplayer = mcBasic.getInstance().getServer().getPlayer(players.get(i).getName());
+			if(sendplayer!=null)
+			{
+			Messages.leavechannelmsg(sendplayer, senduser, oldch);
+			}
+			i++;
+		}
+		}
+		
+	}
+
+	private static void joinchannel(Player player, String ch) 
+	{
+		if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", ch).findRowCount()>0)
+		{
+		List<mB_channelplayers> players = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", ch).findList();
+		int i =0;
+		int size = players.size();
+		Player sendplayer;
+		String senduser=player.getName();
+		while(i < size)
+		{
+			sendplayer = mcBasic.getInstance().getServer().getPlayer(players.get(i).getName());
+			if(sendplayer!=null)
+			{
+			Messages.joinchannelmsg(sendplayer, senduser, ch);
+			}
+			i++;
+		}
+		}
+		
+	}
+
 	public static void channelcheck(PlayerChatEvent event) 
 	{
 		Player player = event.getPlayer();
 		if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findRowCount()==1)
 		{
+			
 			String msg = event.getMessage();
+			
 			event.setCancelled(true);
 			mB_channelplayers chplayer = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findUnique();
 			String ch = chplayer.getChannel();
-			List<mB_channelplayers> players = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", ch).findList();
-			int i =0;
-			int size = players.size();
-			Player sendplayer;
-			String senduser=player.getName();
-			String sendprefix = Messages.colormsg(PermissionsEx.getUser(senduser).getPrefix());
-			while(i < size)
+			String userch=ch;
+			if(ch.equalsIgnoreCase("h")||ch.equalsIgnoreCase("t")||ch.equalsIgnoreCase("g"))
 			{
-				sendplayer = mcBasic.getInstance().getServer().getPlayer(players.get(i).getName());
-				if(sendplayer!=null)
-				{
-								
-				Messages.channelmsg(sendplayer,ch,msg,senduser,sendprefix);
-				i++;
-				}
+			sendMessage(ch,player,msg,userch);
+			ch="0";
+			sendMessage(ch,player,msg,userch);
 			}
+			else if (ch.equalsIgnoreCase("0"))
+			{
+				sendMessage(ch,player,msg,userch);
+				ch="H";
+				sendMessage(ch,player,msg,userch);
+				ch="T";
+				sendMessage(ch,player,msg,userch);
+				ch="G";
+				sendMessage(ch,player,msg,userch);
+			}
+			else
+			{
+				sendMessage(ch,player,msg,userch);
+			}
+			
+		}
+		else
+		{
+			mB_channelplayers chplayer = new mB_channelplayers();
+			chplayer.setName(player.getName());
+			chplayer.setChannel("0");
+			mcBasic.getInstance().getDatabase().save(chplayer);
+			
+			String msg = event.getMessage();
+			event.setCancelled(true);
+			String ch = "0";
+			String userch =ch;
+			sendMessage(ch,player,msg,userch);
+			ch="H";
+			sendMessage(ch,player,msg,userch);
+			ch="T";
+			sendMessage(ch,player,msg,userch);
+			ch="G";
+			sendMessage(ch,player,msg,userch);
 		}
 			
 	}
 
+	private static void sendMessage(String ch, Player player, String msg, String userch)
+	{
+		if(mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", ch).findRowCount()>0)
+		{
+		List<mB_channelplayers> players = mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("channel", ch).findList();
+		int i =0;
+		int size = players.size();
+		Player sendplayer;
+		String senduser=player.getName();
+		String sendprefix = Messages.colormsg(PermissionsEx.getUser(senduser).getPrefix());
+		while(i < size)
+		{
+			sendplayer = mcBasic.getInstance().getServer().getPlayer(players.get(i).getName());
+			if(sendplayer!=null)
+			{
+			Messages.channelmsg(sendplayer,userch,msg,senduser,sendprefix);
+			}
+			i++;
+		}
+		}
+	}
+
+	public static void leavechannels(Player player, String[] args) 
+	{
+		if(args.length==0)
+		{
+			String ch = "0";
+			savechannel(player, ch);
+		}
+		else Messages.wronguse(player);
+		
+	}
 	
 
 }

@@ -233,16 +233,18 @@ public class Messages {
 		if(ch.equalsIgnoreCase("h")) player.sendMessage(ChatColor.DARK_AQUA + "Du hast den"+ChatColor.DARK_PURPLE+" Hilfe-Channel "+ChatColor.DARK_AQUA +"betreten!");
 		else if(ch.equalsIgnoreCase("g")) player.sendMessage(ChatColor.DARK_AQUA + "Du hast den"+ChatColor.DARK_PURPLE+" Global-Channel "+ChatColor.DARK_AQUA +"betreten!");
 		else if(ch.equalsIgnoreCase("t")) player.sendMessage(ChatColor.DARK_AQUA + "Du hast den"+ChatColor.DARK_PURPLE+" Handels-Channel "+ChatColor.DARK_AQUA +"betreten!");
+		else if(ch.equals("0"))player.sendMessage(ChatColor.DARK_AQUA + "Du hast den Channel verlassen!");
 		else player.sendMessage(ChatColor.DARK_AQUA + "Du hast den Channel "+ChatColor.DARK_PURPLE+ch+ChatColor.DARK_AQUA +" betreten!");
 		
 	}
 
 	public static void channelmsg(Player player, String ch, String msg, String senduser, String sendprefix) 
 	{
-		if(ch.equalsIgnoreCase("h")) player.sendMessage(ChatColor.LIGHT_PURPLE + "[H] "+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
-		else if(ch.equalsIgnoreCase("g")) player.sendMessage(ChatColor.BLUE + "[G] "+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
-		else if(ch.equalsIgnoreCase("t")) player.sendMessage(ChatColor.GREEN + "[T] "+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
-		else player.sendMessage(ChatColor.GRAY + "["+ch+"]"+ sendprefix + ChatColor.WHITE+ senduser+" "+  ": " +msg);
+		if(ch.equalsIgnoreCase("h")) player.sendMessage(ChatColor.LIGHT_PURPLE + "[H]"+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
+		else if(ch.equalsIgnoreCase("g")) player.sendMessage(ChatColor.DARK_GRAY +"[G]"+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
+		else if(ch.equalsIgnoreCase("t")) player.sendMessage(ChatColor.GREEN + "[T]"+ sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
+		else if(ch.equals("0")) player.sendMessage(sendprefix + ChatColor.WHITE+" "+ senduser + ": "+ msg);
+		else player.sendMessage(ChatColor.GRAY + "["+ch+"]"+ sendprefix + ChatColor.WHITE+" "+ senduser+" "+  ": " +msg);
 		
 		
 	}
@@ -265,6 +267,18 @@ public class Messages {
 	    message = message.replace("&d", ChatColor.LIGHT_PURPLE.toString());
 	    message = message.replace("&e", ChatColor.YELLOW.toString());
 	    return message;
+	}
+
+	public static void joinchannelmsg(Player sendplayer, String senduser,
+			String ch) 
+	{
+		sendplayer.sendMessage(ChatColor.DARK_AQUA + senduser + " hat den Channel betreten.");
+	}
+
+	public static void leavechannelmsg(Player sendplayer, String senduser,
+			String oldch) 
+	{
+		sendplayer.sendMessage(ChatColor.DARK_AQUA + senduser + " hat den Channel verlassen.");
 	}
 	
 }

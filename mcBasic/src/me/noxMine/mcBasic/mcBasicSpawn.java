@@ -2,6 +2,8 @@ package me.noxMine.mcBasic;
 
 
 import java.io.File;
+
+import me.noxMine.mcBasic.db.mB_channelplayers;
 import me.noxMine.mcBasic.db.mB_firstspawnplayer;
 
 import org.bukkit.ChatColor;
@@ -183,6 +185,13 @@ public class mcBasicSpawn {
 			
 			mB_firstspawnplayer firstplayer = new mB_firstspawnplayer();
 			firstplayer.setName(player.getName());
+			if (mcBasic.getInstance().getDatabase().find(mB_channelplayers.class).where().ieq("name", player.getName()).findRowCount() == 0)
+			{
+			mB_channelplayers chplayer = new mB_channelplayers();
+			chplayer.setName(player.getName());
+			chplayer.setChannel("0");
+			mcBasic.getInstance().getDatabase().save(chplayer);
+			}
 			mcBasic.getInstance().getDatabase().save(firstplayer);
 			System.out.println("[mcBasic] Player "+player.getName()+" added to Database");
 			Messages.firstwelcome(player);

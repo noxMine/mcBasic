@@ -115,3 +115,7 @@ commands:
     description: Change channel
     aliases: ch
     usage: /<command> <channel>
+  leavechannel:
+    description: Leave current channel
+    aliases: [lch, l]
+    usage: /<command>

@@ -182,6 +182,10 @@ public class Commands
 		{
 			mcBasicMessaging.channel(player,args);
 		}
+		if(cmd.getName().equalsIgnoreCase("leavechannel")||cmd.getName().equalsIgnoreCase("lch")||cmd.getName().equalsIgnoreCase("l"))
+		{
+			mcBasicMessaging.leavechannels(player,args);
+		}
 				
 	}
 	
